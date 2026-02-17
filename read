@@ -1,0 +1,46 @@
+git clone https://github.com/Pach1n/nextcosas.git
+cd nextcosas
+Instala dependencias:
+bash
+
+npm ci
+Verifica que existe .env (en tu repo ya va subido).
+Si no está, créalo con:
+bash
+
+Copy-Item .env.example .env
+Levanta la base:
+bash
+
+docker compose -f ./docker/proyecto/docker-compose.postgres.yaml up -d
+Comprueba que Postgres está healthy:
+bash
+
+docker compose -f ./docker/proyecto/docker-compose.postgres.yaml ps
+Genera Prisma Client:
+bash
+
+npx prisma generate
+Aplica migraciones:
+bash
+
+npx prisma migrate deploy
+Carga datos de ejemplo:
+bash
+
+npx tsx db/seed.ts
+Arranca la app en puerto 3000:
+bash
+
+npm run dev:3000
+Abre:
+App: http://localhost:3000
+Adminer: http://localhost:9900
+Si algo falla y quieres “reset total” de la base:
+
+bash
+
+docker compose -f ./docker/proyecto/docker-compose.postgres.yaml down -v
+docker compose -f ./docker/proyecto/docker-compose.postgres.yaml up -d
+npx prisma migrate deploy
+npx tsx db/seed.ts
